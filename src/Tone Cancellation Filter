@@ -1,0 +1,34 @@
+%Hadeel Mabrouk
+%900163213
+%DSP Project | Question 3 - Tone Cancellation
+
+%CODE
+clc
+clear
+close all
+
+[signalRead,sampleRate] = audioread("ILoveDSPtone.wav");
+signalRead = signalRead';
+[~,signalReadL] = size(signalRead);
+
+%applying the low pass filter
+w = lowpass(signalRead,900,sampleRate);
+[~,outputLength] = size(w); 
+outputRate = (sampleRate*1.022);
+
+%plots
+%before enhancement
+subplot(2,1,1);
+f = sampleRate*(0:(signalReadL-1))/signalReadL;
+plot(f,real(fft(signalRead)));
+title("Tone Input Signal in Frequency Domain");
+%after enhancement
+subplot(2,1,2);
+f = outputRate*(0:(outputLength-1))/outputLength;
+plot(f,real(fft(w)));
+title("Tone Enhanced Signal in Frequency Domain");
+
+%saving the enhanced signal
+sound(w,outputRate);
+audiowrite("ToneOut.wav",w,outputRate);
+
